@@ -14,7 +14,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/getProducts")
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = {"http://localhost:4200", "https://bussines-umber.vercel.app"})
     public List<CardProductResponseDTO> getProducts() {
         return productService.getAllProducts();
     }
