@@ -1,5 +1,6 @@
 services:
   backend:
+    build: .
     image: mi-backend-spring
     ports:
       - "8080:8080"
