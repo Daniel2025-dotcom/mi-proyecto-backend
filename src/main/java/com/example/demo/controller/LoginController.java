@@ -15,7 +15,7 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/validator")
-    @CrossOrigin(origins = {"http://localhost:4200", "https://bussines-umber.vercel.app"})
+    @CrossOrigin(origins = {"http://localhost:4200", "https://bussines-umber.vercel.app"}, allowedHeaders = "*")
     public ResponseEntity<?> validator(@RequestBody LoginResquestDTO dto) {
 
         if (loginService.validatorLogin(dto)) {

@@ -29,19 +29,19 @@ public class AdminController {
     private PdfService pdfService;
 
     @PostMapping("/category")
-    @CrossOrigin(origins = {"http://localhost:4200", "https://bussines-umber.vercel.app"})
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public void addCategory(@RequestBody CategoryRequestDTO dto) {
         adminService.addCategory(dto);
     }
 
     @GetMapping("/categories")
-    @CrossOrigin(origins = {"http://localhost:4200", "https://bussines-umber.vercel.app"})
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public List<CategoryResponseDTO> getCategories() {
         return adminService.getCategoryTree();
     }
 
     @PostMapping("/loadProduct")
-    @CrossOrigin(origins = {"http://localhost:4200", "https://bussines-umber.vercel.app"})
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<Map<String, String>> loadProduct(@RequestBody ProductRequestDTO dto) {
         adminService.saveProduct(dto);
         return ResponseEntity.ok(
@@ -50,7 +50,7 @@ public class AdminController {
     }
 
     @GetMapping("/catalog/pdf")
-    @CrossOrigin(origins = {"http://localhost:4200", "https://bussines-umber.vercel.app"})
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<InputStreamResource> getCatalogPdf() {
         ByteArrayInputStream bis = pdfService.ObtenerPdf();
         HttpHeaders headers = new HttpHeaders();

@@ -15,13 +15,13 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/getProducts")
-    @CrossOrigin(origins = {"http://localhost:4200", "https://bussines-umber.vercel.app"})
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public List<CardProductResponseDTO> getProducts() {
         return productService.getAllProducts();
     }
 
     @PostMapping("/getProductsByCategory")
-    @CrossOrigin(origins = {"http://localhost:4200", "https://bussines-umber.vercel.app"})
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public List<CardProductResponseDTO> getProductsByCategory(@RequestBody ProductByCategoryRequestDTO request) {return productService.getAllProductsByCategoryAndChildren(request.getId());
     }
 }
