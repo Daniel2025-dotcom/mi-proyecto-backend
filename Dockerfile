@@ -1,24 +1,32 @@
-# --- ETAPA 1: Compilación ---
-FROM maven:3.9-eclipse-temurin-17-alpine AS builder
+# ==========================================================================
+# Etapa 1: Compilación del proyecto (Maven)
+# ==========================================================================
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# CORRECCIÓN: Le indicamos a Docker la ruta exacta desde la raíz del repositorio
-# Cambia "backend/" por el nombre real de tu carpeta si es distinto.
+# Copiamos el archivo de configuración de dependencias
 COPY pom.xml .
-RUN mvn dependency:go-offline -B
 
-# CORRECCIÓN: Hacemos lo mismo con el código fuente
+# Copiamos el código fuente de la app
 COPY src ./src
+
+# Compilamos el archivo .jar saltando los tests para acelerar el despliegue
 RUN mvn clean package -DskipTests
 
-# --- ETAPA 2: Ejecución ---
+# ==========================================================================
+# Etapa 2: Imagen final de ejecución (Súper liviana)
+# ==========================================================================
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-# Aquí no hace falta cambiar nada, porque esta etapa copia el .jar 
-# desde el contenedor "builder" temporal, no desde tu repositorio de GitHub.
-COPY --from=builder /app/target/*.jar app.jar
+# Copiamos el .jar generado en la etapa anterior (revisá que el nombre coincida)
+COPY --from=build /app/target/*.jar app.jar
 
+# Exponemos el puerto en el contenedor
 EXPOSE 8080
 
+# Configuramos el límite de memoria para que Render no mate el proceso (300MB)
+ENV JAVA_TOOL_OPTIONS="-Xmx300m -Xms300m"
+
+# Comando para arrancar la aplicación
 ENTRYPOINT ["java", "-jar", "app.jar"]
