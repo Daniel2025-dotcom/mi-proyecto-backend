@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import com.example.demo.DTOs.request.ProductByIdDTO;
 import com.example.demo.DTOs.response.CardProductResponseDTO;
 import com.example.demo.model.Category;
 import com.example.demo.model.Product;

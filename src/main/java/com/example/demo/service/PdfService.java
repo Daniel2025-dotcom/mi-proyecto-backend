@@ -15,41 +15,53 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class PdfService {
 
     @Autowired
     private ProductRepository productRepository;
 
-    public ByteArrayInputStream ObtenerPdf() {
+    public ByteArrayInputStream obtenerPdf() {
         List<Product> products = productRepository.findAll();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-
         try {
             PdfWriter writer = new PdfWriter(out);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
-
+            document.add(new Paragraph("Catálogo de Productos")
+                    .setBold()
+                    .setFontSize(18));
+            document.add(new Paragraph("\n"));
+            Table table = new Table(UnitValue.createPercentArray(new float[]{1, 3, 5, 2}));
+            table.setWidth(UnitValue.createPercentValue(100));
+            table.addHeaderCell(new Cell().add(new Paragraph("ID").setBold()));
+            table.addHeaderCell(new Cell().add(new Paragraph("Nombre").setBold()));
+            table.addHeaderCell(new Cell().add(new Paragraph("Descripción").setBold()));
+            table.addHeaderCell(new Cell().add(new Paragraph("Precio").setBold()));
             for (Product p : products) {
-                document.add(
-                    new Paragraph(p.getName() != null ? p.getName() : "")
+                table.addCell(String.valueOf(p.getId()));
+                table.addCell(
+                        p.getName() != null
+                                ? p.getName()
+                                : "-"
                 );
-                document.add(
-                    new Paragraph(
-                        p.getDescription() != null ? p.getDescription() : ""
-                    )
+                table.addCell(
+                        p.getDescription() != null
+                                ? p.getDescription()
+                                : "-"
                 );
-                document.add(
-                    new Paragraph(
-                        "$" + (p.getPrice() != null ? p.getPrice() : 0.0)
-                    )
+                table.addCell(
+                        "$" + (p.getPrice() != null
+                                ? p.getPrice()
+                                : 0.0)
                 );
             }
+            document.add(table);
             document.close();
         } catch (Exception e) {
             throw new RuntimeException(
-                "Error al generar el PDF del catálogo",
-                e
+                    "Error al generar el PDF del catálogo", e
             );
         }
 

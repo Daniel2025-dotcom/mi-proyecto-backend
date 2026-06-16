@@ -7,15 +7,17 @@ public class CardProductResponseDTO {
     private String url;
     private String name;
     private Double price;
+    private String pathCategory;
 
     public CardProductResponseDTO() {
 
     }
-    public CardProductResponseDTO(Long id,String url, String name, Double price) {
+    public CardProductResponseDTO(Long id,String url, String name, Double price, String pathCategory) {
         this.id = id;
         this.url = url;
         this.name = name;
         this.price = price;
+        this.pathCategory = pathCategory;
     }
 
     public Double getPrice() {
@@ -47,5 +49,11 @@ public class CardProductResponseDTO {
     }
     public void setId(Long id) {
         this.id = id;
+    }
+    public String getPathCategory() {
+        return pathCategory;
+    }
+    public void setPathCategory(String pathCategory) {
+        this.pathCategory = pathCategory;
     }
 }

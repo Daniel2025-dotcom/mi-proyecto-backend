@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.DTOs.request.ProductByIdDTO;
 import com.example.demo.DTOs.response.CardProductResponseDTO;
 import com.example.demo.model.Category;
 import com.example.demo.model.Product;
@@ -19,7 +20,7 @@ public class ProductService {
 
     public List<CardProductResponseDTO> getAllProducts(){
         List <Product> listItems = productRepository.findAll();
-        List <CardProductResponseDTO> listItemsDTO =  listItems.stream().map(p->new CardProductResponseDTO(p.getId(),p.getUrl(),p.getName(),p.getPrice())).toList();
+        List <CardProductResponseDTO> listItemsDTO =  listItems.stream().map(p->new CardProductResponseDTO(p.getId(),p.getUrl(),p.getName(),p.getPrice(),pathCategory(p.getCategory()))).toList();
         return listItemsDTO;
 
     }
@@ -28,7 +29,7 @@ public class ProductService {
         List<Category> allCategories = new ArrayList<>();
         findAllChildrenRecursive(rootCategory, allCategories);
         List<Product> listItems = productRepository.findByCategoryIn(allCategories);
-        return listItems.stream().map(p -> new CardProductResponseDTO(p.getId(), p.getUrl(), p.getName(), p.getPrice())).toList();
+        return listItems.stream().map(p -> new CardProductResponseDTO(p.getId(), p.getUrl(), p.getName(), p.getPrice(),pathCategory(p.getCategory()))).toList();
     }
 
 
@@ -37,5 +38,19 @@ public class ProductService {
         for (Category child : currentCategory.getChildren()) {
             findAllChildrenRecursive(child, accumulator);
         }
+    }
+    private String pathCategory(Category category) {
+        String path = "";
+        while (category.getParent() != null) {
+            path = path + category.getTitle() + "/" ;
+            category = category.getParent();
+        }
+        return path  + category.getTitle();
+    }
+
+    public Boolean deleteProduct(ProductByIdDTO dto) {
+        Product product = productRepository.findById(dto.getId()).orElseThrow(() -> new RuntimeException("El id no existe."));
+            productRepository.delete(product);
+            return true;
     }
 }
