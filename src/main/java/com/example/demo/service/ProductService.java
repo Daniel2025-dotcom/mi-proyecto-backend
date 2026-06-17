@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.DTOs.request.ProductByIdDTO;
+import com.example.demo.DTOs.request.ProductRequestDTO;
 import com.example.demo.DTOs.response.CardProductResponseDTO;
+import com.example.demo.DTOs.response.ProductResponseDTO;
 import com.example.demo.model.Category;
 import com.example.demo.model.Product;
 import com.example.demo.repository.CategoryRepository;
@@ -52,5 +54,22 @@ public class ProductService {
         Product product = productRepository.findById(dto.getId()).orElseThrow(() -> new RuntimeException("El id no existe."));
             productRepository.delete(product);
             return true;
+    }
+    public ProductResponseDTO getProductById(ProductByIdDTO id) {
+
+        Product product = productRepository.findById(id.getId()).orElseThrow(() -> new RuntimeException("El id no existe."));
+        return new ProductResponseDTO(product.getName(),product.getDescription(),product.getPrice(),product.getUrl(),product.getId(),pathCategory(product.getCategory()));
+
+    }
+    public String modifyProduct(ProductRequestDTO dto, Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("El id no existe."));
+        Category newCategory = categoryRepository.findById(dto.getCategoryId()).orElseThrow(() -> new RuntimeException("La categoría especificada no existe."));
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setUrl(dto.getUrl());
+        product.setCategory(newCategory);
+        productRepository.save(product);
+        return "Producto modificado con exito";
     }
 }

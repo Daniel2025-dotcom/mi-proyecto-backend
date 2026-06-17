@@ -49,7 +49,9 @@ public class Category {
     public List<Category> getChildren() {
         return children;
     }
-
+    public void setId(Long id) {
+        this.id = id;
+    }
     public Long getId() {
         return id;
     }

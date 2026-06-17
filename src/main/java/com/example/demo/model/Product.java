@@ -21,6 +21,14 @@ public class Product {
     private Category category;
 
     public Product() {}
+    public Product(Long id, String name, String description, Double price, String url, Category category) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.url = url;
+        this.category = category;
+    }
 
     public Long getId() {
         return id;
