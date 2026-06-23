@@ -26,7 +26,7 @@ COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
 
 # Configuramos el límite de memoria para que Render no mate el proceso (300MB)
-ENV JAVA_TOOL_OPTIONS="-Xmx300m -Xms300m"
+ENV JAVA_TOOL_OPTIONS="-Xmx500m -Xms500m"
 
 # Comando para arrancar la aplicación
 ENTRYPOINT ["java", "-jar", "app.jar"]
